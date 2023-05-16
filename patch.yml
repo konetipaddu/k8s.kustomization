@@ -1,0 +1,33 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spc
+  labels:
+    tool: spring-petclinic
+spec:
+  minReadySeconds: 2
+  replicas: 4
+  selector:
+    matchLabels:
+      tool: spring-petclinic
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: 
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      name: spc-pod
+      labels:
+        tool: spring-petclinic
+    spec:
+      containers:
+        - name: spc
+          image: paddutester/spring-petclinic:spc-1.0
+          resources:
+            requests:
+              memory: 150mi
+              cpu: 100m
+          ports:
+            - containerPort: 8080
